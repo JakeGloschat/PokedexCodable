@@ -77,7 +77,7 @@ class PokedexTableViewController: UITableViewController {
     // MARK: - Navigation
   /*
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-    }
+    }  toPokemonDetailVC
     */
 
 }
