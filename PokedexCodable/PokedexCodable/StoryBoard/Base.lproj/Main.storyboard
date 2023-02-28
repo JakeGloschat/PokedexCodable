@@ -175,7 +175,6 @@
                     </view>
                     <navigationItem key="navigationItem" id="sLB-AS-KFb"/>
                     <connections>
-                        <outlet property="pokemonIDLabel" destination="yXr-Kd-UUf" id="VHb-Lb-Z9E"/>
                         <outlet property="pokemonIdLabel" destination="yXr-Kd-UUf" id="R40-au-ckd"/>
                         <outlet property="pokemonMovesTableView" destination="5YN-2C-h0q" id="exc-QF-9cn"/>
                         <outlet property="pokemonNameLabel" destination="459-RP-24O" id="unN-V0-yL9"/>

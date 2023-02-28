@@ -22,12 +22,33 @@ class PokemonDetailViewController: UIViewController {
         super.viewDidLoad()
         pokemonMovesTableView.dataSource = self
         pokemonMovesTableView.delegate = self
-
     }
     
     // MARK: - Properties
-     var pokemon: Pokemon?
-     
+    var pokemon: Pokemon? {
+        didSet {
+            updateViews()
+        }
+    }
+    
+    // MARK: - Functions
+    func updateViews() {
+        guard let pokemon = pokemon else { return }
+        NetworkingController.fetchSprite(for: pokemon.sprites.frontShiny) { result in
+            switch result {
+            case .success(let image):
+                DispatchQueue.main.async {
+                    self.pokemonNameLabel.text = pokemon.name
+                    self.pokemonIdLabel.text = "\(pokemon.id)"
+                    self.pokemonSpriteImageView.image = image
+                    self.pokemonMovesTableView.reloadData()
+                }
+            case .failure(let error):
+                print(error.errorDescription ?? Constants.Error.unkownError)
+            }
+        }
+    }
+    
 }
 
 extension PokemonDetailViewController: UITableViewDataSource, UITableViewDelegate {
