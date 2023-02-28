@@ -8,13 +8,13 @@
 import UIKit
 
 class PokedexTableViewController: UITableViewController {
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-       
+        
         fetchPokedex()
     }
-
+    
     // MARK: - Properties
     var topLevel: TopLevel?
     var pokedex: [PokemonResults] = []
@@ -45,13 +45,13 @@ class PokedexTableViewController: UITableViewController {
         // #warning Incomplete implementation, return the number of rows
         return pokedex.count
     }
-
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "pokedexCell", for: indexPath) as? PokemonTableViewCell else { return UITableViewCell() }
-
-         let pokemon = pokedex[indexPath.row]
+        
+        let pokemon = pokedex[indexPath.row]
         cell.updateUI(forPokemon: pokemon)
-
+        
         return cell
     }
     
@@ -60,12 +60,12 @@ class PokedexTableViewController: UITableViewController {
         guard let topLevel = topLevel else { return }
         
         if indexPath.row == pokedex.count - 1 {
-            NetworkingController.fetchPokedex(with: topLevel.next) { result in
+            NetworkingController.fetchPokedex(with: topLevel.next) { [weak self] result in
                 switch result {
                 case .success(let topLevel):
-                    self.topLevel = topLevel
-                    self.pokedex.append(contentsOf: topLevel.results)
-                    self.reloadTableViewOnMainThread()
+                    self?.topLevel = topLevel
+                    self?.pokedex.append(contentsOf: topLevel.results)
+                    self?.reloadTableViewOnMainThread()
                     
                 case .failure(let error):
                     print(error.errorDescription ?? Constants.Error.unkownError)
@@ -73,11 +73,24 @@ class PokedexTableViewController: UITableViewController {
             }
         }
     }
-  
+    
     // MARK: - Navigation
-  /*
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-    }  toPokemonDetailVC
-    */
-
+        guard segue.identifier == "toPokemonDetailVC",
+              let destinationVC = segue.destination as? PokemonDetailViewController,
+              let indexPath = tableView.indexPathForSelectedRow else { return }
+        let pokemonToSend = pokedex[indexPath.row]
+        NetworkingController.fetchPokemon(with: pokemonToSend.url) { result in
+            switch result {
+                
+            case .success(let pokemon):
+                DispatchQueue.main.async {
+                    destinationVC.pokemon = pokemon
+                }
+            case .failure(let error):
+                print(error.errorDescription ?? Constants.Error.unkownError)
+            }
+        }
+    }
 }

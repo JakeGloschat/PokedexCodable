@@ -24,6 +24,10 @@ class PokemonDetailViewController: UIViewController {
         pokemonMovesTableView.delegate = self
 
     }
+    
+    // MARK: - Properties
+     var pokemon: Pokemon?
+     
 }
 
 extension PokemonDetailViewController: UITableViewDataSource, UITableViewDelegate {
