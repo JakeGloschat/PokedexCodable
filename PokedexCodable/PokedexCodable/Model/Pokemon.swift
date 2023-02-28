@@ -23,6 +23,7 @@ struct Pokemon: Decodable {
     let id: Int
     let name: String
     let sprites: Sprites
+    let moves: [Moves]
 }
 
 struct Sprites: Decodable {
@@ -33,4 +34,13 @@ struct Sprites: Decodable {
     
     let frontDefault: String
     let frontShiny: String
+}
+
+struct Moves: Decodable {
+    let move: Move
+}
+
+struct Move: Decodable {
+    let name: String
+    let url: String
 }
